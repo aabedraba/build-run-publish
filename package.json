@@ -1,0 +1,22 @@
+{
+  "name": "build-run-publish",
+  "version": "1.0.0",
+  "description": "",
+  "bin": {
+    "build": "dist/build.js"
+  },
+  "scripts": {
+    "build": "npm run transpile && npm run copy && node dist/build.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "copy": "cp -r templates/ dist/",
+    "transpile": "babel --presets es2015 -d dist/ src/"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-es2015": "^6.24.1"
+  },
+  "dependencies": {}
+}
