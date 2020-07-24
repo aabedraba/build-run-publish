@@ -1,0 +1,21 @@
+steps:
+  - name: gcr.io/cloud-builders/docker
+    args: ["build", "-t", "gcr.io/USER:REPO:$SHORT_SHA", "."]
+  - name: gcr.io/cloud-builders/docker
+    args:
+      [
+        "run",
+        "-t",
+        "--entrypoint=sh",
+        "gcr.io/USER:REPO:$SHORT_SHA",
+        "-c",
+        "npm test",
+      ]
+  - name: gcr.io/cloud-builders/docker
+    args: ["push", "gcr.io/USER:REPO:$SHORT_SHA"]
+  - name: "gcr.io/cloud-builders/gcloud"
+    entrypoint: "bash"
+    args:
+      - "-c"
+      - |
+        [[ "$BRANCH_NAME" == "master" ]] && gcloud beta run deploy REPO --image=gcr.io/USER:REPO:$SHORT_SHA --region=europe-west4 --platform=managed  || echo "Skipping . . ."
